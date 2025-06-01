@@ -4,7 +4,7 @@ import sqlite3
 import bcrypt
 import traceback
 import sys
-import regex
+from app import regex
 
 connect = sqlite3.connect('./db/project.db')
 cursor = connect.cursor() 

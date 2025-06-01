@@ -6,7 +6,7 @@ import sys
 
 def check_login(email, password, flag= False):
     try:
-        with sqlite3.connect("./db/project.db") as conn:
+        with sqlite3.connect("../db/project.db") as conn:
             cursor = conn.cursor()
             cursor.execute("SELECT email, senha FROM users WHERE email = ?", (email,))
             user = cursor.fetchone()
