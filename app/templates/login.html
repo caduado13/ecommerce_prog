@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}"> 
+</head>
+<body>
+  <h1 class="logo">LOGO</h1>
+  <section class="register-login-container">
+       <h1>Login</h1>
+       <div>
+        <form action="" method="POST">
+          {{form.hidden_tag()}}
+            <ul>
+               <li>
+                <p>{{form.email.label}}</p>
+                {{form.email(placeholder = "Escreva seu email")}}
+                {% if form.email.errors %}
+                   <ul class = "errors">
+                       {% for errors in form.email.errors %}
+                           <li style="color: red;">{{error}}</li>
+                       {% endfor %}
+                   </ul>
+                 {% endif %}
+               </li>
+               <li>
+                <p>{{form.password.label}}</p>
+                {{form.password(placeholder = "Escreva seu email")}}
+                {% if form.password.errors %}
+                   <ul class = "errors">
+                       {% for errors in form.password.errors %}
+                           <li style="color: red;">{{error}}</li>
+                       {% endfor %}
+                   </ul>
+                 {% endif %}
+               </li>
+            </ul>
+            {{form.submit(class="btn-style")}}
+        </form>
+       </div>
+   </section>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <ul class="flashes">
+        {% for category, message in messages %}
+            <li class="{{ category }}">{{ message }}</li>
+        {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+</body>
+</html>

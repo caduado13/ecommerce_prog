@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}"> 
+</head>
+<body>
+    <h1 class="logo">LOGO</h1>
+    <section class="register-login-container">
+        <h1>Registro</h1>
+        <div>
+            <form method="POST" action="">
+                {{form.hidden_tag()}}
+                <ul>
+                    <li>
+                        <p>{{form.name.label}}</p>
+                        {{form.name(placeholder = "Escreva seu nome")}}
+                        {% if form.name.errors %}
+                            <ul class = "errors">
+                                {% for errors in form.name.errors %}
+                                    <li style="color: red;">{{error}}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    </li>
+                    <li>
+                        <p>{{form.email.label}}</p>
+                        {{form.email(placeholder = "Escreva seu email")}}
+                        {% if form.email.errors %}
+                            <ul class = "errors">
+                                {% for errors in form.email.errors %}
+                                    <li style="color: red;">{{error}}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    </li>
+                    <li>
+                        <p>{{form.password.label}}</p>
+                        {{form.password(placeholder = "Escreva sua Senha")}}
+                        {% if form.password.errors %}
+                            <ul class = "errors">
+                                {% for errors in form.password.errors %}
+                                    <li style="color: red;">{{error}}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    </li>
+                    <li>
+                        <p>{{form.confirm_password.label}}</p>
+                        {{form.confirm_password(placeholder = "Confirme sua Senha")}}
+                        {% if form.confirm_password.errors %}
+                            <ul class = "errors">
+                                {% for errors in form.confirm_password.errors %}
+                                    <li style="color: red;">{{error}}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    </li>
+                    <li>
+                        <p>{{form.cpf.label}}</p>
+                        {{form.cpf(placeholder = "Escreva seu Cpf")}}
+                        {% if form.cpf.errors %}
+                            <ul class = "errors">
+                                {% for errors in form.cpf.errors %}
+                                    <li style="color: red;">{{error}}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    </li>
+                    {{form.submit(class="btn-style")}}
+                </ul>
+            </form>
+        </div>
+    </section>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <ul class="flashes">
+                {% for category, message in messages %}
+                    <li class="{{ category }}">{{ message }}</li>
+                {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
+</body>
+</html>
