@@ -5,7 +5,7 @@ from app.models.user import User
 import re
 
 
-def validate_password_strength(field):
+def validate_password_strength(form, field):
     password = field.data
     # Regex: Mínimo de 8 caracteres, pelo menos uma letra maiúscula, uma minúscula, um dígito e um caractere especial
     regex = r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$'

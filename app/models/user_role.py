@@ -16,18 +16,18 @@ class UserRole(db.Model):
         return f'<UserRole UserID:{self.user_id} RoleID:{self.role_id}>'
 
     @classmethod
-    def assign_role(cls, user, role):
-        exististing_associoation = cls.query.filter_by(user_id=user.id, role_id=role.id).first()
+    def assign_role(cls, user_id, role_id):
+        exististing_associoation = cls.query.filter_by(user_id=user_id, role_id=role_id).first()
         if exististing_associoation:
             return
-        association = cls(user=user, role=role)
+        association = cls(user_id=user_id, role_id=role_id)
         db.session.add(association)
         db.session.commit()
         return association
     
     @classmethod
-    def remove_role(cls, user, role):
-        association = cls.query.filter_by(user_id=user.id, role_id=role.id).first()
+    def remove_role(cls, user_id, role_id):
+        association = cls.query.filter_by(user_id=user_id, role_id=role_id).first()
         if association:
             db.session.delete(association)
             db.session.commit()

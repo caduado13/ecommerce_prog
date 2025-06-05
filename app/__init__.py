@@ -1,12 +1,12 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
-from flask_bcrypt import Bcrypt # Importar Flask-Bcrypt
+from flask_bcrypt import Bcrypt 
 from flask_login import LoginManager # Importar Flask-Login
 import os
 
-db = SQLAlchemy() # Inicializa o SQLAlchemy
-bcrypt = Bcrypt() # Inicializa Bcrypt
-login_manager = LoginManager() # Inicializa LoginManager
+db = SQLAlchemy()
+bcrypt = Bcrypt()
+login_manager = LoginManager()
 login_manager.login_view = 'main.login_render' # Define a rota para redirecionar se o login for obrigatório
 login_manager.login_message_category = 'info' # Categoria da mensagem flash para login requerido
 
@@ -28,8 +28,10 @@ def create_app():
 
     #Blueprints importados aqui
     from app.routes import auth_bp
+    from app.routes import main_bp
 
     app.register_blueprint(auth_bp)
+    app.register_blueprint(main_bp)
     # Importe os modelos APÓS db.init_app(app)
     # Importar aqui garante que os modelos tenham acesso à instância 'db'
     from app.models.user import User
