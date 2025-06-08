@@ -12,6 +12,5 @@ class Permission(db.Model):
     
     @classmethod
     def get_by_name(cls, name):
-        # Query o banco de dados para encontrar a primeira permissão com o nome fornecido
         return cls.query.filter_by(name=name).first()
     

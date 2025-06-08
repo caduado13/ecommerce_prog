@@ -5,9 +5,23 @@ from app.models.user import User
 from app.models.role import Role
 from app.models.user_role import UserRole
 from app.auth.forms import RegisterForm, LoginForm
+from app.models.product import Product
 
 main_bp = Blueprint('main', __name__, template_folder='templates')
 auth_bp = Blueprint('auth', __name__, template_folder='templates')
+
+def redirect_user_home():
+    roles = [ur.role.name for ur in current_user.user_roles]
+
+    if 'admin' in roles:
+        return redirect(url_for('main.admin_home'))
+    elif 'vendedor' in roles:
+        return redirect(url_for('main.vendedor_home'))
+    elif 'cliente' in roles:
+        return redirect(url_for('main.cliente_home'))
+    else:
+        flash("Sem perfil de acesso definido.", "warning")
+        return redirect(url_for('main.home'))
 
 @auth_bp.route('/register', methods = ['GET', 'POST'])
 def register():
@@ -44,15 +58,15 @@ def register():
 @auth_bp.route('/login', methods = ['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
-        return redirect(url_for('main.home'))
+        return redirect_user_home()
     
     form = LoginForm()
     if form.validate_on_submit():
         user = User.get_by_email(form.email.data)
         if user and user.check_password(form.password.data):
-# Pega a URL de onde o usuário veio, se houver
-            flash('Login bem sucedido!')
-            return redirect(url_for('main.home'))
+            login_user(user=user)
+            flash('Login bem-sucedido!')
+            return redirect_user_home()
         else:
             flash('Login falhou, tente novamente!')
     return render_template('login.html', title='Login', form=form)
@@ -64,6 +78,29 @@ def logout():
     flash('Você foi desconectado.', 'info')
     return redirect(url_for('main.home'))
 
-@main_bp.route("/home") #Template da página principal
-def home():
-    return render_template("home.html")
+@main_bp.route('/admin/home')
+@login_required
+def admin_home():
+    if not current_user.has_permission('view_admin_dashboard'):
+        flash("Acesso negado.", "danger")
+        return redirect(url_for('main.home'))
+    return render_template('home.html', role='admin')
+
+
+@main_bp.route('/vendedor/home')
+@login_required
+def vendedor_home():
+    if not current_user.has_permission('crud_product'):
+        flash("Acesso negado.", "danger")
+        return redirect(url_for('main.home'))
+    return render_template('home.html', role='vendedor')
+
+
+@main_bp.route('/cliente/home')
+@login_required
+def cliente_home():
+    products = Product.query.all()
+    if not current_user.has_permission('view_products'):
+        flash("Acesso negado.", "danger")
+        return redirect(url_for('main.home'))
+    return render_template('home.html', role='cliente',  products=products)

@@ -3,9 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Home - {{ role|capitalize }}</title>
 </head>
 <body>
-    Bem vindo a loja
+    <h1>Bem-vindo, {{ current_user.name }}!</h1>
+    <h2>Você está na área de <strong>{{ role }}</strong>.</h2>
+    {% if role == 'admin' %}
+      <p>Aqui você pode gerenciar usuários, permissões e pedidos.</p>
+    {% elif role == 'vendedor' %}
+      <p>Aqui você pode adicionar ou editar seus produtos e ver pedidos.</p>
+    {% elif role == 'cliente' %}
+      <p>Aqui você pode navegar pelos produtos e acompanhar seus pedidos.</p>
+    {% else %}
+      <p>Área não reconhecida.</p>
+    {% endif %}
+
+    <h2>Produtos disponíveis</h2>
+
+{% for product in products %}
+  <div>
+    <h3>{{ product.name }}</h3>
+    <p>{{ product.description }}</p>
+    <p>Preço: R$ {{ product.price }}</p>
+
+    {% if current_user.has_permission('buy_products') %}
+      <form action="{}" method="post">
+        <button type="submit">Comprar</button>
+      </form>
+      {% else %}
+      <p><em>Você não tem permissão para comprar produtos.</em></p>
+      {% endif %}
+    </div>
+    {% endfor %}
 </body>
 </html>

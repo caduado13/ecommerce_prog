@@ -25,6 +25,11 @@ def create_app():
     login_manager.init_app(app) # Associa o login_manager ao app
 
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    from app.models.user import User
+    from app.models.role import Role
+    from app.models.permission import Permission
+    from app.models.user_role import UserRole
+    from app.models.role_permission import RolePermission
 
     #Blueprints importados aqui
     from app.routes import auth_bp
@@ -35,10 +40,6 @@ def create_app():
     # Importe os modelos APÓS db.init_app(app)
     # Importar aqui garante que os modelos tenham acesso à instância 'db'
     from app.models.user import User
-    from app.models.role import Role
-    from app.models.permission import Permission
-    from app.models.user_role import UserRole
-    from app.models.role_permission import RolePermission
     
     @login_manager.user_loader
     def load_user(user_id):
