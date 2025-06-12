@@ -17,6 +17,7 @@ from app.models.role import Role
 from app.models.permission import Permission
 from app.models.user_role import UserRole
 from app.models.role_permission import RolePermission
+from app.models.order import Order, OrderItem 
 
 
 def initialize_database():
@@ -67,7 +68,7 @@ def initialize_database():
             admin_role = Role.query.filter_by(name='admin').first()
             if admin_role:
                 # Use o método assign_role do modelo UserRole
-                UserRole.assign_role(admin_user, admin_role)
+                UserRole.assign_role(admin_user.id, admin_role.id)
                 db.session.commit() # Commit para a associação de papel
             print("Admin user created!")
 

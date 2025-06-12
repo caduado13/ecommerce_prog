@@ -24,6 +24,15 @@ class User(db.Model, UserMixin):
     def check_password(self, password):
         # Compara a senha fornecida com o hash armazenado
         return bcrypt.check_password_hash(self.password_hash, password)
+    
+    def has_permission(self, permission_name):
+        #Verifica se o usuário possui uma permissão específica.
+        for user_role in self.user_roles:
+            role = user_role.role
+            for role_permission in role.role_permissions:
+                if role_permission.permission.name == permission_name:
+                    return True
+        return False
 
     @classmethod
     def get_by_email(cls, email):
