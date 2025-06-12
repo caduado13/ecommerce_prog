@@ -1,16 +1,15 @@
+# app/utils.py
 from functools import wraps
-from flask import redirect, url_for, flash
+from flask import flash, redirect, url_for
 from flask_login import current_user
 
-def permission_required(permission_name):
+def permission_required(permission_name, redirect_endpoint='main.home', message="Acesso negado"):
     def decorator(f):
         @wraps(f)
-        def decorated_function(*args, **kwargs):
-            if not current_user.is_authenticated:
-                return redirect(url_for('login'))
-            if not current_user.has_permission(permission_name):
-                flash("Acesso negado: permissão insuficiente.", "danger")
-                return redirect(url_for('index'))
+        def wrapped(*args, **kwargs):
+            if not current_user.is_authenticated or not current_user.has_permission(permission_name):
+                flash(message, 'danger')
+                return redirect(url_for(redirect_endpoint))
             return f(*args, **kwargs)
-        return decorated_function
+        return wrapped
     return decorator

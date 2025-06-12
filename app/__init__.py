@@ -30,6 +30,7 @@ def create_app():
     from app.models.permission import Permission
     from app.models.user_role import UserRole
     from app.models.role_permission import RolePermission
+    from app.models.order import Order, OrderItem 
 
     #Blueprints importados aqui
     from app.routes import auth_bp

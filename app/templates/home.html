@@ -8,6 +8,10 @@
 <body>
     <h1>Bem-vindo, {{ current_user.name }}!</h1>
     <h2>Você está na área de <strong>{{ role }}</strong>.</h2>
+    <form action="{{ url_for('main.listar_pedidos') }}" method="get">
+      <button type="submit">🛒 Ver meus pedidos</button>
+    </form>
+
     {% if role == 'admin' %}
       <p>Aqui você pode gerenciar usuários, permissões e pedidos.</p>
     {% elif role == 'vendedor' %}
@@ -27,7 +31,7 @@
     <p>Preço: R$ {{ product.price }}</p>
 
     {% if current_user.has_permission('buy_products') %}
-      <form action="{}" method="post">
+      <form action="{{ url_for('main.comprar_produto', product_id=product.id) }}" method="post">
         <button type="submit">Comprar</button>
       </form>
       {% else %}

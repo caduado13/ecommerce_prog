@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>{{ title }}</h1>
+    <form method="POST">
+        {{ form.hidden_tag() }}
+        <p>{{ form.name.label }}<br> {{ form.name() }}</p>
+        {% if form.name.errors %}
+            {% for error in form.name.errors %}
+                <span style="color:red;">{{ error }}</span>
+            {% endfor %}
+        {% endif %}
+        
+        <p>{{ form.description.label }}<br> {{ form.description() }}</p>
+        {% if form.description.errors %}
+            {% for error in form.description.errors %}
+                <span style="color:red;">{{ error }}</span>
+            {% endfor %}
+        {% endif %}
+
+        <p>{{ form.price.label }}<br> {{ form.price() }}</p>
+        {% if form.price.errors %}
+            {% for error in form.price.errors %}
+                <span style="color:red;">{{ error }}</span>
+            {% endfor %}
+        {% endif %}
+
+        {{ form.submit() }}
+    </form>
+
+    <a href="{{ url_for('home') }}">Voltar</a>
+</body>
+</html>

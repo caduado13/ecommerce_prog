@@ -1,9 +1,12 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField
-from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
+from wtforms import (
+    StringField, PasswordField, SubmitField,
+    FloatField, TextAreaField, SelectField, SelectMultipleField
+)
+from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError, NumberRange
 from app.models.user import User
+from app.models.role import Role
 import re
-
 
 def validate_password_strength(form, field):
     password = field.data
@@ -39,3 +42,29 @@ class LoginForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired(), Email()])
     password = PasswordField('Password', validators=[DataRequired()])
     submit = SubmitField('Login')
+
+
+class ProductForm(FlaskForm):
+    name = StringField('Nome do Produto', validators=[DataRequired(), Length(min=1, max=100)])
+    price = FloatField('Preço', validators=[DataRequired(), NumberRange(min=0)])
+    description = TextAreaField('Descrição', validators=[Length(max=500)])
+    submit = SubmitField('Salvar Produto')
+
+
+class OrderStatusForm(FlaskForm):
+    status = SelectField(
+        'Status do Pedido',
+        choices=[('novo', 'Novo'), ('processando', 'Processando'),
+                 ('enviado', 'Enviado'), ('cancelado', 'Cancelado')],
+        validators=[DataRequired()]
+    )
+    submit = SubmitField('Atualizar Status')
+
+
+class UserForm(FlaskForm):
+    name = StringField('Nome Completo', validators=[DataRequired(), Length(min=8, max=128)])
+    email = StringField('Email', validators=[DataRequired(), Email()])
+    # No __init__ do view, você deve popular form.roles.choices:
+    # form.roles.choices = [(r.id, r.name) for r in Role.query.all()]
+    roles = SelectMultipleField('Papéis', coerce=int, validators=[DataRequired()])
+    submit = SubmitField('Salvar Usuário')
